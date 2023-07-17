@@ -28,7 +28,7 @@
         </field>
     </record>
     <!-- Form -->
-    <record id="faculty_branches_form_view" model="ir.ui.view">
+    <record id="exam_details_form_view" model="ir.ui.view">
         <field name="name">Exam Details</field>
         <field name="model">exam.details</field>
         <field name="type">form</field>
@@ -39,11 +39,30 @@
                         <group>
                             <field name="date"/>
                             <field name="exam_type"/>
+                            <field name="classroom"/>
+                            <field name="batch"/>
 
                         </group>
+                        <group>
+                            <field name='pass_percentage'/>
+                            <field name='fail_percentage'/>
+                            <!-- <field name='_percentage'/> -->
+                        </group>
+                        <notebook>
+                            <page string="Students">
+                                <field name="student_results">
+                                    <tree editable="top"> 
+                                        <field name = "student_id"/>
+                                        <field name = "marks"/>
+                                        <field name = "present"/>
+                                    </tree>
+                                </field>
+                            </page>
+                        </notebook>
                     </group>
                 </sheet>
             </form>
         </field>
     </record>
+
 </odoo>

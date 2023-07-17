@@ -6,6 +6,8 @@
     'data': [
         'security/ir.model.access.csv',
         'views/exam_details.xml',
+        'views/exam_result.xml',
+
     ],
     'demo': [],
     'summary': "Logic Exam",
