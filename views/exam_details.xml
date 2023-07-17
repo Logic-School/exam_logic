@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <!-- Menu Action and Items for Exams -->
+    <record model="ir.actions.act_window" id="details_exam_view_action">
+        <field name="name">Exam</field>
+        <field name="res_model">exam.details</field>
+        <field name="view_mode">tree,form</field>
+    </record>
+    <menuitem name="Exams" id="menu_exams"
+              action="details_exam_view_action"
+              sequence="6"/>
+    <menuitem name="Exams" id="menu_exam_details"
+              action="details_exam_view_action"
+              parent="menu_exams"
+              sequence="1"/>
+
+    <!-- Tree view -->
+    <record id="exam_details_tree_view" model="ir.ui.view">
+        <field name="name">Exam Details</field>
+        <field name="model">exam.details</field>
+        <field name="type">tree</field>
+        <field name="arch" type="xml">
+            <tree>
+                <field name="date"/>
+                <field name="exam_type"/>
+            </tree>
+
+        </field>
+    </record>
+    <!-- Form -->
+    <record id="faculty_branches_form_view" model="ir.ui.view">
+        <field name="name">Exam Details</field>
+        <field name="model">exam.details</field>
+        <field name="type">form</field>
+        <field name="arch" type="xml">
+            <form string="Exam">
+                <sheet>
+                    <group>
+                        <group>
+                            <field name="date"/>
+                            <field name="exam_type"/>
+
+                        </group>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+</odoo>

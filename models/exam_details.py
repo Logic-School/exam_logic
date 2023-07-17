@@ -13,3 +13,4 @@ class ExamDetails(models.Model):
     fail_percentage = fields.Integer(compute='', string="Fail Percentage")
     faculty = fields.Many2one('faculty.details',string="Faculty")
     class_teacher = fields.Many2one('hr.employee',string="Class Teacher")
+    

@@ -2,9 +2,10 @@
     'name': "Logic Exam",
     'version': "14.0.1.0",
     'sequence': "0",
-    # 'depends': ['base', 'mail'],
+    'depends': ['base', 'Faculty','Students'],
     'data': [
-
+        'security/ir.model.access.csv',
+        'views/exam_details.xml',
     ],
     'demo': [],
     'summary': "Logic Exam",
