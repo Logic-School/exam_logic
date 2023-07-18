@@ -1,13 +1,22 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <odoo>
+    <!-- Action -->
+    <record model="ir.actions.act_window" id="details_exam_view_action">
+        <field name="name">Exam</field>
+        <field name="res_model">exam.details</field>
+        <!-- <field name="context">{'default_exam_id': active_id}</field>
+        <field name="domain">[('exam_id', '=', active_id)]</field> -->
+        <field name="view_mode">tree,form</field>
+    </record>
     <!-- Tree view -->
     <record id="student_result_tree_view" model="ir.ui.view">
-        <field name="name">Exam Details</field>
-        <field name="model">student.result</field>
+        <field name="name">Student Results</field>
+        <field name="model">logic.student.result</field>
         <field name="type">tree</field>
         <field name="arch" type="xml">
             <tree>
-                <field name="name"/>
+                <field name="student_id"/>
+                <field name="exam_id"/>
                 <!-- <field name="exam_type"/> -->
             </tree>
 

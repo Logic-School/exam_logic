@@ -39,19 +39,24 @@
                         <group>
                             <field name="date"/>
                             <field name="exam_type"/>
+                            <field name="quart_percent" attrs="{'invisible': [('exam_type','!=','quarterly')]}"/>
                             <field name="classroom"/>
                             <field name="batch"/>
 
                         </group>
                         <group>
+                            <field name="total_marks"/>
+                            <field name="pass_mark"/>
+                            <field name="scored_marks"/>
+                            <field name="present_students"/>
                             <field name='pass_percentage'/>
                             <field name='fail_percentage'/>
                             <!-- <field name='_percentage'/> -->
                         </group>
                         <notebook>
                             <page string="Students">
-                                <field name="student_results">
-                                    <tree editable="top"> 
+                                <field name="student_results" domain="[('exam_id', '!=', False)]">
+                                    <tree editable="bottom"> 
                                         <field name = "student_id"/>
                                         <field name = "marks"/>
                                         <field name = "present"/>
