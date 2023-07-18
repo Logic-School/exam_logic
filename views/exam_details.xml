@@ -34,6 +34,9 @@
         <field name="type">form</field>
         <field name="arch" type="xml">
             <form string="Exam">
+                <header>
+                    <button name="create_student_results" string="Refresh" type="object" class="oe_highlight"/>
+                </header> 
                 <sheet>
                     <group>
                         <group>

@@ -14,13 +14,26 @@ class ExamDetails(models.Model):
     fail_percentage = fields.Integer(string="Fail Percentage", compute="_compute_pass_fail_percentage")
     faculty = fields.Many2one('res.users',string="Faculty", domain=[('faculty_check','=',True)])
     class_teacher = fields.Many2one('hr.employee',string="Class Teacher")
-    student_results = fields.Many2many('logic.student.result', string='Students',compute="_compute_student_result_records",inverse="_inverse_student_result",store=True)
+    student_results = fields.Many2many('logic.student.result', string='Students',store=True)
     pass_mark = fields.Integer(string="Pass Mark")
     total_marks = fields.Integer(string="Total Marks")
     present_students = fields.Integer(string="Attended Students",compute="_compute_total_attendance")        
     scored_marks = fields.Integer(string="Scored Marks", compute="_compute_scored_marks")
 
-    
+    def create_student_results(self):
+        for record in self:
+            if not record.student_results:
+                students = self.env['logic.students'].search([
+                        ('batch_id', '=', record.batch.id)])
+                self.env['logic.student.result'].search([('exam_id','=',record.id)]).unlink()
+                for student in students:
+                    student_result = self.env['logic.student.result'].create({
+                        'student_id': student.id,
+                        'marks':0,
+                        'exam_id': record.id,
+                    })
+                record.student_results = self.env['logic.student.result'].search([('exam_id','=',record.id)])
+
     @api.depends('student_results')
     def _compute_pass_fail_percentage(self):
         for record in self:
@@ -57,28 +70,6 @@ class ExamDetails(models.Model):
             for result in record.student_results:
                 total += result.marks
             record.scored_marks = total
-
-    @api.depends('batch')
-    def _compute_student_result_records(self):
-        for record in self:
-            students = self.env['logic.students'].search([
-                    ('batch_id', '=', record.batch.id)])
-            self.env['logic.student.result'].search([('exam_id','=',record.id)]).unlink()
-            for student in students:
-                student_result = self.env['logic.student.result'].create({
-                    'student_id': student.id,
-                    'marks':0,
-                    'exam_id': record.id,
-                })
-            record.student_results = self.env['logic.student.result'].search([('exam_id','=',record.id)])
-        
-    def _inverse_student_result(self):
-        for record in self:
-            if not record.student_results:
-                self._compute_student_result_records()
-            else:
-                record.student_results = self.env['logic.student.result'].search([('exam_id','=',record.id)])
-
     @api.depends('date', 'exam_type', 'batch')
     def _compute_name(self):    
         for record in self:        
