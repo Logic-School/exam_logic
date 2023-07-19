@@ -1,6 +1,7 @@
 from odoo import models,fields,api
 from bokeh.plotting import figure 
 from bokeh.embed import components 
+from odoo.exceptions import UserError
 import math  
 
 class ExamDetails(models.Model):
@@ -13,8 +14,8 @@ class ExamDetails(models.Model):
     batch = fields.Many2one('logic.base.batch',string="Batch")
     classroom = fields.Many2one('logic.base.class',string="Class Room")
     # coordinator = fields.Many2one('res.users',string="Coordinator",)
-    pass_percentage = fields.Integer(string="Pass Percentage", compute="_compute_pass_fail_percentage")
-    fail_percentage = fields.Integer(string="Fail Percentage", compute="_compute_pass_fail_percentage")
+    pass_percentage = fields.Integer(string="Pass Percentage", compute="_compute_pass_fail_percentage",default=0)
+    fail_percentage = fields.Integer(string="Fail Percentage", compute="_compute_pass_fail_percentage",default=0)
     faculty = fields.Many2one('res.users',string="Faculty", domain=[('faculty_check','=',True)])
     class_teacher = fields.Many2one('hr.employee',string="Class Teacher")
     student_results = fields.Many2many('logic.student.result', string='Students',store=True)
@@ -23,22 +24,38 @@ class ExamDetails(models.Model):
     present_students = fields.Integer(string="Attended Students",compute="_compute_total_attendance")        
     average_marks = fields.Float(string="Average Marks", compute="_compute_average_marks")
     bokeh_chart = fields.Text(string="Result Chart",compute = "_compute_bokeh_chart")
+    students_added = fields.Boolean(string="Students Added", default=False, help="To identify if students result records are added to the form")
+
+    # @api.model
+    # def write(self,values):
+    #     for record in self:
+    #         all_results = self.env['logic.student.result'].search([('exam_id','=',record.id)])
+    #         for result in all_results:
+    #             if result not in record.student_results:
+    #                 self.env['logic.student.result'].search([('id','=',result.id)]).unlink()
+    #     override_create = super(ExamDetails,self).write(values)
+    #     return override_create
+
+    # "Add Students" button
     def create_student_results(self):
         for record in self:
-            if not record.student_results:
-                students = self.env['logic.students'].search([
-                        ('batch_id', '=', record.batch.id)])
-                self.env['logic.student.result'].search([('exam_id','=',record.id)]).unlink()
-                for student in students:
-                    student_result = self.env['logic.student.result'].create({
-                        'student_id': student.id,
-                        'marks':0,
-                        'exam_id': record.id,
-                    })
-                record.student_results = self.env['logic.student.result'].search([('exam_id','=',record.id)])
-
-    
-    @api.depends('pass_percentage','fail_percentage')
+            # if not record.student_results:
+            students = self.env['logic.students'].search([
+                    ('batch_id', '=', record.batch.id)])
+            self.env['logic.student.result'].search([('exam_id','=',record.id)]).unlink()
+            for student in students:
+                student_result = self.env['logic.student.result'].create({
+                    'student_id': student.id,
+                    'marks':0,
+                    'exam_id': record.id,
+                })
+            record.student_results = self.env['logic.student.result'].search([('exam_id','=',record.id)])
+            record.students_added = True
+    def reset_student_results(self):
+        for record in self:
+            self.env['logic.student.result'].search([('exam_id','=',record.id)]).unlink()
+            record.students_added = False
+    @api.depends('present_students')
     def _compute_bokeh_chart(self):
         for record in self:
             # Design your bokeh figure:
@@ -51,7 +68,7 @@ class ExamDetails(models.Model):
             # Generating the start angle values  
             start_angle = [math.radians(0)]  
             prev = start_angle[0]  
-            for k in radians1[:-1]:  
+            for k in radians1:  
                 start_angle.append(k + prev)  
                 prev = k + prev  
                 
@@ -81,7 +98,7 @@ class ExamDetails(models.Model):
             script, div = components(graph1)
             record.bokeh_chart = '%s%s' % (div, script)
 
-    @api.depends('student_results')
+    @api.depends('present_students')
     def _compute_pass_fail_percentage(self):
         for record in self:
             pass_count = 0
@@ -94,7 +111,7 @@ class ExamDetails(models.Model):
                         fail_count+=1
                 else:
                     continue
-            if record.present_students != 0:
+            if record.present_students > 0:
                 record.pass_percentage = int((pass_count/record.present_students)*100)
                 record.fail_percentage = 100-record.pass_percentage
             else:
@@ -123,7 +140,9 @@ class ExamDetails(models.Model):
             
     @api.depends('date', 'exam_type', 'batch')
     def _compute_name(self):    
-        for record in self:        
+        for record in self:    
+            if not record.date:
+                raise UserError("A date must be set for the exam before saving!")       
             date = fields.Date.from_string(
                 record.date).strftime('%Y/%m/%d')
             # exam_type = dict(self._fields['exam_type']._description_selection(self.env))[self.exam_type]

@@ -1,13 +1,20 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <odoo>
     <!-- Action -->
-    <record model="ir.actions.act_window" id="details_exam_view_action">
-        <field name="name">Exam</field>
-        <field name="res_model">exam.details</field>
+    <record model="ir.actions.act_window" id="details_exam_result_view_action">
+        <field name="name">Student Exam Results</field>
+        <field name="res_model">logic.student.result</field>
         <!-- <field name="context">{'default_exam_id': active_id}</field>
         <field name="domain">[('exam_id', '=', active_id)]</field> -->
         <field name="view_mode">tree,form</field>
     </record>
+    <!-- menu items for exam details -->
+
+    <menuitem name="Results" id="menu_exam_results"
+              action="details_exam_result_view_action"
+              parent="menu_exams"
+              sequence="1"/>
+
     <!-- Tree view -->
     <record id="student_result_tree_view" model="ir.ui.view">
         <field name="name">Student Results</field>

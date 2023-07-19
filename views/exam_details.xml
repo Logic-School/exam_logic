@@ -14,6 +14,16 @@
               parent="menu_exams"
               sequence="1"/>
 
+    <!-- chatgpt  -->
+    <!-- <record id="action_exam_result_m2m_wizard" model="ir.actions.act_window">
+        <field name="name">Exam Result View</field>
+        <field name="res_model">logic.student.result</field>
+        <field name="view_mode">tree,form</field>
+        <field name="view_id" ref="exam_logic.student_result_tree_view"/>
+        <field name="target">new</field>
+        <field name="context">{'default_parent_id': active_id}</field>
+    </record> -->
+            
     <!-- Tree view -->
     <record id="exam_details_tree_view" model="ir.ui.view">
         <field name="name">Exam Details</field>
@@ -36,18 +46,20 @@
         <field name="arch" type="xml">
             <form string="Exam">
                 <header>
-                    <button name="create_student_results" string="Refresh" type="object" class="oe_highlight"/>
+                    <button name="create_student_results" string="Add Students" help="Click here to add students of the selected batch" type="object" class="oe_highlight" attrs="{'invisible': [('students_added','=',True)]}"/>
+                    <button name="reset_student_results" string="Reset Students" help="Clear all the result records of students appeared in this exam" type="object" class="oe_highlight" attrs="{'invisible': [('students_added','=',False)]}"/>
                 </header> 
                 <sheet>
                     <group>
                         <group>
+                            <field name="students_added" invisible="1"/>
                             <field name="date"/>
                             <field name="exam_type"/>
                             <field name="quart_percent" attrs="{'invisible': [('exam_type','!=','quarterly')]}"/>
                             <field name="topic" attrs="{'invisible': [('exam_type','!=','topic')]}"/>
                             <field name="classroom"/>
                             <field name="batch"/>
-                            <field name="faculty"/>
+                            <field name="faculty" options="{'no_create': True, 'no_create_edit':True}"/>
 
                         </group>
                         <group>
@@ -56,15 +68,15 @@
                             <field name="pass_mark"/>
                             <field name="average_marks"/>
                             <field name="present_students"/>
-                            <field name='pass_percentage' invisible="1"/>
-                            <field name='fail_percentage' invisible="1"/>
+                            <field name='pass_percentage' invisible="0"/>
+                            <field name='fail_percentage' invisible="0"/>
                             <!-- <field name='_percentage'/> -->
                         </group>
                         <group>
                             <notebook>
                                 <page string="Students">
-                                        <field name="student_results" domain="[('exam_id', '!=', False)]">
-                                            <tree editable="bottom"> 
+                                        <field name="student_results" context = "{'parent_id': active_id, 'parent_model': 'exam.details'}" domain="[('exam_id', '=', active_id)]" >
+                                            <tree editable="bottom" create="0"> 
                                                 <field name = "student_id"/>
                                                 <field name = "marks"/>
                                                 <field name = "present"/>
