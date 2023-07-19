@@ -21,6 +21,7 @@
         <field name="type">tree</field>
         <field name="arch" type="xml">
             <tree>
+                <field name="name"/>
                 <field name="date"/>
                 <field name="exam_type"/>
             </tree>
@@ -43,30 +44,40 @@
                             <field name="date"/>
                             <field name="exam_type"/>
                             <field name="quart_percent" attrs="{'invisible': [('exam_type','!=','quarterly')]}"/>
+                            <field name="topic" attrs="{'invisible': [('exam_type','!=','topic')]}"/>
                             <field name="classroom"/>
                             <field name="batch"/>
+                            <field name="faculty"/>
 
                         </group>
                         <group>
+                            <field name="create_uid" string="Coordinator"/>
                             <field name="total_marks"/>
                             <field name="pass_mark"/>
-                            <field name="scored_marks"/>
+                            <field name="average_marks"/>
                             <field name="present_students"/>
-                            <field name='pass_percentage'/>
-                            <field name='fail_percentage'/>
+                            <field name='pass_percentage' invisible="1"/>
+                            <field name='fail_percentage' invisible="1"/>
                             <!-- <field name='_percentage'/> -->
                         </group>
-                        <notebook>
-                            <page string="Students">
-                                <field name="student_results" domain="[('exam_id', '!=', False)]">
-                                    <tree editable="bottom"> 
-                                        <field name = "student_id"/>
-                                        <field name = "marks"/>
-                                        <field name = "present"/>
-                                    </tree>
-                                </field>
-                            </page>
-                        </notebook>
+                        <group>
+                            <notebook>
+                                <page string="Students">
+                                        <field name="student_results" domain="[('exam_id', '!=', False)]">
+                                            <tree editable="bottom"> 
+                                                <field name = "student_id"/>
+                                                <field name = "marks"/>
+                                                <field name = "present"/>
+                                            </tree>
+                                        </field>
+                                </page>
+                            </notebook>
+                        </group>
+                        <group>
+                            <!-- <div> -->
+                                <field name="bokeh_chart" widget="bokeh_chart" nolabel="1"/>
+                            <!-- </div> -->
+                        </group>
                     </group>
                 </sheet>
             </form>
