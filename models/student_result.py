@@ -11,6 +11,7 @@ class StudentExamResult(models.Model):
         if parent_id and parent_model:
             parent_obj = self.env[parent_model].browse(parent_id)
             return parent_obj.id
+    
     exam_id = fields.Many2one("exam.details", ondelete='cascade', string="Exam",default=_get_default_exam_id)
     marks = fields.Integer(string="Marks")
     present = fields.Boolean(string="Attendance")

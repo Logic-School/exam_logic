@@ -1,8 +1,7 @@
 from odoo import models,fields,api
-from bokeh.plotting import figure 
-from bokeh.embed import components 
 from odoo.exceptions import UserError
 import math  
+from . import pie_chart
 
 class ExamDetails(models.Model):
     _name = 'exam.details'
@@ -14,8 +13,8 @@ class ExamDetails(models.Model):
     batch = fields.Many2one('logic.base.batch',string="Batch")
     classroom = fields.Many2one('logic.base.class',string="Class Room")
     # coordinator = fields.Many2one('res.users',string="Coordinator",)
-    pass_percentage = fields.Integer(string="Pass Percentage", compute="_compute_pass_fail_percentage",default=0)
-    fail_percentage = fields.Integer(string="Fail Percentage", compute="_compute_pass_fail_percentage",default=0)
+    pass_percentage = fields.Float(string="Pass Percentage", compute="_compute_pass_fail_percentage",default=0)
+    fail_percentage = fields.Float(string="Fail Percentage", compute="_compute_pass_fail_percentage",default=0)
     faculty = fields.Many2one('res.users',string="Faculty", domain=[('faculty_check','=',True)])
     class_teacher = fields.Many2one('hr.employee',string="Class Teacher")
     student_results = fields.Many2many('logic.student.result', string='Students',store=True)
@@ -25,18 +24,7 @@ class ExamDetails(models.Model):
     average_marks = fields.Float(string="Average Marks", compute="_compute_average_marks")
     bokeh_chart = fields.Text(string="Result Chart",compute = "_compute_bokeh_chart")
     students_added = fields.Boolean(string="Students Added", default=False, help="To identify if students result records are added to the form")
-
-    # @api.model
-    # def write(self,values):
-    #     for record in self:
-    #         all_results = self.env['logic.student.result'].search([('exam_id','=',record.id)])
-    #         for result in all_results:
-    #             if result not in record.student_results:
-    #                 self.env['logic.student.result'].search([('id','=',result.id)]).unlink()
-    #     override_create = super(ExamDetails,self).write(values)
-    #     return override_create
-
-    # "Add Students" button
+    
     def create_student_results(self):
         for record in self:
             # if not record.student_results:
@@ -59,44 +47,7 @@ class ExamDetails(models.Model):
     def _compute_bokeh_chart(self):
         for record in self:
             # Design your bokeh figure:
-            graph1 = figure(title="Results",plot_width=250, plot_height=220)  
-            fields = ['Pass','Fail']
-            percentages = [record.pass_percentage,record.fail_percentage]
-                            # formula for converting percentage into radians  
-            radians1 = [math.radians((percent / 100) * 360) for percent in percentages]  
-                
-            # Generating the start angle values  
-            start_angle = [math.radians(0)]  
-            prev = start_angle[0]  
-            for k in radians1:  
-                start_angle.append(k + prev)  
-                prev = k + prev  
-                
-            # generating the end angle values  
-            end_angle = start_angle[1:] + [math.radians(0)]  
-                
-            # initiate the center of the pie chart  
-            x = 0  
-            y = 0  
-                
-            # then, we will initiate the radius of the glyphs  
-            radius = 1  
-                
-            # now, generate the color of the wedges  
-            color1 = ["green","red"]  
-                
-            # now, we will plot the graph  
-            for k in range(len(fields)):  
-                graph1.wedge(x, y, radius,  
-                            start_angle = start_angle[k],  
-                            end_angle = end_angle[k],  
-                            color = color1[k],  
-                            legend_label = fields[k])  
-            # `p.html.data` contains both markup and the script of a chart.script, div = components(p)
-            graph1.legend.glyph_height = 10#some int
-            graph1.legend.glyph_width = 10#some int
-            script, div = components(graph1)
-            record.bokeh_chart = '%s%s' % (div, script)
+            record.bokeh_chart = pie_chart.get_chart_component(record)
 
     @api.depends('present_students')
     def _compute_pass_fail_percentage(self):
@@ -112,8 +63,8 @@ class ExamDetails(models.Model):
                 else:
                     continue
             if record.present_students > 0:
-                record.pass_percentage = int((pass_count/record.present_students)*100)
-                record.fail_percentage = 100-record.pass_percentage
+                record.pass_percentage = round((pass_count/record.present_students)*100, 1)
+                record.fail_percentage = round(100-record.pass_percentage,1)
             else:
                 record.pass_percentage=0
                 record.fail_percentage=0
