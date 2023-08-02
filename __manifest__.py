@@ -2,7 +2,7 @@
     'name': "Logic Exam",
     'version': "14.0.1.0",
     'sequence': "0",
-    'depends': ['base', 'logic_base','admission','Faculty','web_widget_bokeh_chart'],
+    'depends': ['base', 'logic_base','admission','faculty','web_widget_bokeh_chart'],
     'data': [
         'security/ir.model.access.csv',
         'views/exam_details.xml',
