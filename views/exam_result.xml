@@ -4,6 +4,7 @@
     <record model="ir.actions.act_window" id="details_exam_result_view_action">
         <field name="name">Student Exam Results</field>
         <field name="res_model">logic.student.result</field>
+        <field name="context">{'search_default_exam_id': 1}</field>
         <!-- <field name="context">{'default_exam_id': active_id}</field>
         <field name="domain">[('exam_id', '=', active_id)]</field> -->
         <field name="view_mode">tree,form</field>
@@ -24,9 +25,29 @@
             <tree>
                 <field name="student_id"/>
                 <field name="exam_id"/>
+                <field name="marks"/>
+                <field name="total_marks"/>
+                <field name="present"/>
                 <!-- <field name="exam_type"/> -->
             </tree>
 
+        </field>
+    </record>
+
+    <record id="student_result_search" model="ir.ui.view">
+        <field name="name">student.result.search</field>
+        <field name="model">logic.student.result</field>
+        <field name="arch" type="xml">
+            <search>
+                <!-- <filter string="Head Approved" name="active" domain="[('state', '=','approved')]"/>
+                <filter string="Paid" name="active" domain="[('state', '=','paid')]"/>
+                <filter string="Rejected" name="active" domain="[('state', '=','reject')]"/>
+                <filter string="Approval Requested" name="active" domain="[('state', '=','payment_request')]"/>
+                <filter string="Drafted" name="active" domain="[('state', '=','draft')]"/> -->
+                <group expand="0" string="Group By">
+                    <filter string="Exam ID" name="exam_id" context="{'group_by': 'exam_id'}"/>
+                </group>
+            </search>
         </field>
     </record>
 </odoo>

@@ -4,6 +4,7 @@
     <record model="ir.actions.act_window" id="details_exam_view_action">
         <field name="name">Exam</field>
         <field name="res_model">exam.details</field>
+        <field name="context">{'search_default_batch': 1}</field>
         <field name="view_mode">tree,form</field>
     </record>
     <menuitem name="Exams" id="menu_exams"
@@ -93,6 +94,18 @@
                     </group>
                 </sheet>
             </form>
+        </field>
+    </record>
+
+    <record id="exam_details_search" model="ir.ui.view">
+        <field name="name">exam.details.search</field>
+        <field name="model">exam.details</field>
+        <field name="arch" type="xml">
+            <search>
+                <group expand="0" string="Group By">
+                    <filter string="Batch" name="batch" context="{'group_by': 'batch'}"/>
+                </group>
+            </search>
         </field>
     </record>
 
