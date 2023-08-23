@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <record model="ir.actions.act_window" id="details_exam_questions_action">
+        <field name="name">Questions</field>
+        <field name="res_model">exam.question</field>
+        <field name="view_mode">tree,form</field>
+    </record>
+    <menuitem name="Questions" id="menu_exam_question"
+              action="details_exam_questions_action"
+              parent="menu_exams"
+              sequence="10"/>
+
+    <record id="exam_question_tree_view" model="ir.ui.view">
+        <field name="name">exam.question.tree.view</field>
+        <field name="model">exam.question</field>
+        <field name="type">tree</field>
+        <field name="arch" type="xml">
+            <tree>
+                <field name="name"/>
+            </tree>
+
+        </field>
+    </record>
+
+    <record id="exam_question_form_view" model="ir.ui.view">
+        <field name="name">Exam Question</field>
+        <field name="model">exam.question</field>
+        <field name="type">form</field>
+        <field name="arch" type="xml">
+            <form string="Exam Question">
+                <sheet>
+                    <group>
+                        <group>
+                            <field name="name"/>
+                            <field name="question_type"/>
+
+                        </group>
+                        <group>
+                            <field name="option_a" attrs="{'invisible':[('question_type','!=','mcq')]}"/>
+                            <field name="option_b" attrs="{'invisible':[('question_type','!=','mcq')]}"/>
+                            <field name="option_c" attrs="{'invisible':[('question_type','!=','mcq')]}"/>
+                            <field name="option_d" attrs="{'invisible':[('question_type','!=','mcq')]}"/>
+                            <field name="mcq_answer" attrs="{'invisible':[('question_type','!=','mcq')]}"/>
+                        </group>
+                        <field name="question" widget="ckeditor" options="{'codeview': true}"/>
+
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record model="ir.actions.act_window" id="details_exam_papers_action">
+        <field name="name">Exam Papers</field>
+        <field name="res_model">exam.paper</field>
+        <field name="view_mode">tree,form</field>
+    </record>
+    <menuitem name="Papers" id="menu_exam_paper"
+              action="details_exam_papers_action"
+              parent="menu_exams"
+              sequence="15"/>
+    
+    
+    <record id="exam_paper_form_view" model="ir.ui.view">
+        <field name="name">Exam Papers</field>
+        <field name="model">exam.paper</field>
+        <field name="type">form</field>
+        <field name="arch" type="xml">
+            <form string="Exam Paper">
+                <header>
+                    <button string="Download Question Paper" name="download_paper_docx" type="object" class="oe_highlight"/>
+                </header>
+                <sheet>
+                    <group>
+                        <field name="name"/>
+                        <!-- <field name="questions_html"/> -->
+                    </group>
+                    <notebook>
+                        <page string="Questions">
+                            <field name="questions">
+                                <tree>
+                                    <field name="name"/>
+                                </tree>
+                            </field>
+                        </page>
+                    </notebook>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+</odoo>

@@ -5,7 +5,7 @@ from . import pie_chart
 
 class ExamDetails(models.Model):
     _name = 'exam.details'
-    name = fields.Char(string="Exam Name",compute = "_compute_name", store=True)
+    name = fields.Char(string="Exam Name", store=True)
     date = fields.Date(string="Exam Date")
     exam_type = fields.Selection([('quarterly', 'Quarterly Exam'), ('topic', 'Topic wise Exam')],string='Exam Type')
     topic = fields.Char(string="Topic")
@@ -89,19 +89,19 @@ class ExamDetails(models.Model):
             else:
                 record.average_marks=0
             
-    @api.depends('date', 'exam_type', 'batch')
-    def _compute_name(self):    
-        for record in self:    
-            if not record.date:
-                raise UserError("A date must be set for the exam before saving!")       
-            date = fields.Date.from_string(
-                record.date).strftime('%Y/%m/%d')
-            # exam_type = dict(self._fields['exam_type']._description_selection(self.env))[self.exam_type]
-            if record.exam_type=="quarterly":
-                exam_type="Q"+record.quart_percent
-            else:
-                exam_type="T"
-            record.name = str(record.batch.name) + "-" + str(exam_type) + "-" + str(date)
+    # @api.depends('date', 'exam_type', 'batch')
+    # def _compute_name(self):    
+    #     for record in self:    
+    #         if not record.date:
+    #             raise UserError("A date must be set for the exam before saving!")       
+    #         date = fields.Date.from_string(
+    #             record.date).strftime('%Y/%m/%d')
+    #         # exam_type = dict(self._fields['exam_type']._description_selection(self.env))[self.exam_type]
+    #         if record.exam_type=="quarterly":
+    #             exam_type="Q"+record.quart_percent
+    #         else:
+    #             exam_type="T"
+    #         record.name = str(record.batch.name) + "-" + str(exam_type) + "-" + str(date)
     
     # @api.onchange('student_results')
     # def _compute_students(self):    

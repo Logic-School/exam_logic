@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+
+    <record id="paperformat_logic_exam_paper" model="report.paperformat">
+        <field name="name">Logic A4</field>
+        <field name="default" eval="True"/>
+        <field name="format">A4</field>
+        <field name="orientation">Portrait</field>
+        <field name="margin_top">22</field>
+        <field name="margin_bottom">7</field>
+        <field name="margin_left">7</field>
+        <field name="margin_right">7</field>
+        <field name="header_line" eval="False"/>
+        <field name="header_spacing">27</field>
+        <field name="dpi">90</field>
+    </record>
+
+
+    <template id="report_question_paper">
+        <t t-call="web.html_container">
+            <t t-foreach="docs" t-as="o">
+                <t>
+                    <div class="page">
+                        <t t-foreach="o.questions" t-as="question">
+                            <!-- <p><span t-field="question.name"/></p> -->
+                            <div class="row" style="page-break-inside:avoid;">
+                                <span t-field="question.question"/><br/>
+                                <span t-if="question.question_type=='mcq'">A) <span t-field="question.option_a"/></span><br/>
+                                <span t-if="question.question_type=='mcq'">B) <span t-field="question.option_b"/></span><br/>
+                                <span t-if="question.question_type=='mcq'">C) <span t-field="question.option_c"/></span><br/>
+                                <span t-if="question.question_type=='mcq'">D) <span t-field="question.option_d"/></span><br/>
+                            </div>
+                        </t>
+                    </div>
+                </t>
+            </t>
+        </t>
+    </template>
+    <record id="action_question_paper_report" model="ir.actions.report">
+        <field name="name">Question Paper</field>
+        <field name="model">exam.paper</field>
+        <field name="report_type">qweb-html</field>
+        <field name="report_name">exam_logic.report_question_paper</field>
+        <field name="report_file">exam_logic.report_question_paper</field>
+        <field name="paperformat_id" ref="exam_logic.paperformat_logic_exam_paper" />
+        <field name="print_report_name">'Question Paper - %s' % (object.name)</field>
+        <field name="binding_model_id" ref="model_exam_paper"/>
+     </record>
+
+
+    <template id="report_answer_key">
+        <t t-call="web.html_container">
+            <t t-foreach="docs" t-as="o">
+                <t>
+                    <div class="page">
+                        <style>
+                            .columns {
+                                display: -ms-flexbox;
+                                display: flex;
+                                -ms-flex-wrap: nowrap;
+                                flex-wrap: nowrap;
+                                margin-left: -.4rem;
+                                margin-right: -.4rem;
+                                overflow-x: auto;
+                            }
+                            .column {
+                                -ms-flex: 1;
+                                flex: 1;
+                                max-width: 100%;
+                                padding-left: .4rem;
+                                padding-right: .4rem;
+                                width: 50%;
+                            }                        
+                        </style>
+                        <h1 align="center"><u>Answer Key</u></h1>
+                        <br/>
+                        <div class="columns">
+                            <!-- <div class="row"> -->
+                            <t t-set="index" t-value="1"/>
+                            <t t-foreach="o.questions" t-as="question">
+                                    <div class="column">
+                                        <span t-esc="str(index)+') '"/><span t-if="question.question_type=='mcq'" t-field="question.mcq_answer"/><br/>
+                                    </div>
+                                    <t t-set="index" t-value="index+1"/>
+                            </t>
+                        </div>
+                    </div>
+                </t>
+            </t>
+        </t>
+    </template>
+    <record id="action_answer_key_report" model="ir.actions.report">
+        <field name="name">Answer Key</field>
+        <field name="model">exam.paper</field>
+        <field name="report_type">qweb-pdf</field>
+        <field name="report_name">exam_logic.report_answer_key</field>
+        <field name="report_file">exam_logic.report_answer_key</field>
+        <field name="paperformat_id" ref="exam_logic.paperformat_logic_exam_paper" />
+        <field name="print_report_name">'Answer Key - %s' % (object.name)</field>
+        <field name="binding_model_id" ref="model_exam_paper"/>
+     </record>
+
+</odoo>

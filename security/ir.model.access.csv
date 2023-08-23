@@ -2,3 +2,6 @@ id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
 
 access_exam,access_details,model_exam_details,base.group_user,1,1,1,1
 access_result,access_details,model_logic_student_result,base.group_user,1,1,1,1
+
+access_exam_question,access_exam_question,model_exam_question,base.group_user,1,1,1,1
+access_exam_question_paper,access_exam_question_paper,model_exam_paper,base.group_user,1,1,1,1
