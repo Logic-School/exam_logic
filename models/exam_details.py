@@ -36,6 +36,7 @@ class ExamDetails(models.Model):
                     'student_id': student.id,
                     'marks':0,
                     'exam_id': record.id,
+                    'present': True,
                 })
             record.student_results = self.env['logic.student.result'].search([('exam_id','=',record.id)])
             record.students_added = True

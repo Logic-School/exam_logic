@@ -39,7 +39,7 @@
     <record id="action_question_paper_report" model="ir.actions.report">
         <field name="name">Question Paper</field>
         <field name="model">exam.paper</field>
-        <field name="report_type">qweb-html</field>
+        <field name="report_type">qweb-pdf</field>
         <field name="report_name">exam_logic.report_question_paper</field>
         <field name="report_file">exam_logic.report_question_paper</field>
         <field name="paperformat_id" ref="exam_logic.paperformat_logic_exam_paper" />
@@ -54,36 +54,38 @@
                 <t>
                     <div class="page">
                         <style>
-                            .columns {
-                                display: -ms-flexbox;
-                                display: flex;
-                                -ms-flex-wrap: nowrap;
-                                flex-wrap: nowrap;
-                                margin-left: -.4rem;
-                                margin-right: -.4rem;
-                                overflow-x: auto;
+                            .column-content{
+                                columns: 100px 3;
                             }
-                            .column {
-                                -ms-flex: 1;
-                                flex: 1;
-                                max-width: 100%;
-                                padding-left: .4rem;
-                                padding-right: .4rem;
-                                width: 50%;
-                            }                        
                         </style>
                         <h1 align="center"><u>Answer Key</u></h1>
                         <br/>
-                        <div class="columns">
+                        <table class="ml-4" align="center" style="table-layout: auto; width: 500px;">
+                            <tbody class="sale_tbody">
+                                <t t-set="answers" t-value="o.get_answers_list()"/>
+                                <t t-foreach="answers" t-as="answer">
+                                    <tr style="height:30px;">
+                                        <td><span t-esc="answer[0]"/></td>
+                                        <td><span t-esc="answer[1]"/></td>
+                                        <td><span t-esc="answer[2]"/></td>
+                                        <!-- <td><span t-esc="answer[3]"/></td> -->
+                                    </tr>
+                                    <!-- <t t-set="index" t-value="index+1"/> -->
+                                </t>
+                            </tbody>
+                        </table>
                             <!-- <div class="row"> -->
-                            <t t-set="index" t-value="1"/>
-                            <t t-foreach="o.questions" t-as="question">
-                                    <div class="column">
-                                        <span t-esc="str(index)+') '"/><span t-if="question.question_type=='mcq'" t-field="question.mcq_answer"/><br/>
-                                    </div>
-                                    <t t-set="index" t-value="index+1"/>
-                            </t>
-                        </div>
+                                <!-- <div class="">
+                                    <t t-set="index" t-value="1"/>
+                                    <t t-set="questions" t-value="o.get_answers_list()"/>
+                                    <t t-foreach="questions" t-as="question">
+                                                <span class="oe_right" t-if="question.question_type=='mcq'"><span t-esc="str(index)+') '"/><span t-if="question.question_type=='mcq'" t-field="question.mcq_answer"/></span>
+                                                <span t-if="index%3!=0" style="padding-left:20px; padding-right:20px" t-esc="''"/> 
+                                                <br t-if="index%3==0"/>
+                                                <t t-set="index" t-value="index+1"/>
+                                    </t>
+                                </div> -->
+
                     </div>
                 </t>
             </t>

@@ -25,6 +25,39 @@ class ExamPaper(models.Model):
     filename = fields.Char(default="exam_paper")
 
 
+    def get_answers_list(self):
+        i=1
+        answers = []
+        for question in self.questions:
+            if question.question_type =='mcq':
+                answers.append(str(i)+") "+question.mcq_answer)
+            i+=1
+        length=len(answers)
+        rem = length%3
+        divs = length//3
+        col1_lim = divs+rem
+        col2_lim = col1_lim + divs
+        col3_lim = col2_lim + divs
+
+        col1_values = answers[0:col1_lim]
+        col2_values = answers[col1_lim:col2_lim]
+        col3_values = answers[col2_lim:col3_lim]
+
+        answers_final=[]
+        for i in range(col1_lim):
+            vals = []
+            vals.append(col1_values[i])
+            try:
+                vals.append(col2_values[i])
+            except:
+                vals.append('')
+            try:
+                vals.append(col3_values[i])
+            except:
+                vals.append('')
+            answers_final.append(vals)
+        return answers_final
+
     def download_paper_docx(self):
         record = self.env['exam.paper'].browse(self.id)
 
