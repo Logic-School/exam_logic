@@ -11,7 +11,7 @@ class ExamDetails(models.Model):
     topic = fields.Char(string="Topic")
     quart_percent = fields.Selection([('25','25%'), ('50', '50%'), ('75', '75%'), ('100', '100%')], string='Quarterly Percent')
     batch = fields.Many2one('logic.base.batch',string="Batch")
-    classroom = fields.Many2one('logic.base.class',string="Class Room")
+    classroom = fields.Many2one('logic.base.class',string="Class",domain="[('batch_id','=',batch)]")
     # coordinator = fields.Many2one('res.users',string="Coordinator",)
     pass_percentage = fields.Float(string="Pass Percentage", compute="_compute_pass_fail_percentage",default=0)
     fail_percentage = fields.Float(string="Fail Percentage", compute="_compute_pass_fail_percentage",default=0)
@@ -26,24 +26,24 @@ class ExamDetails(models.Model):
     students_added = fields.Boolean(string="Students Added", default=False, help="To identify if students result records are added to the form")
     
     def create_student_results(self):
-        for record in self:
+        # for record in self:
             # if not record.student_results:
-            students = self.env['logic.students'].search([
-                    ('batch_id', '=', record.batch.id)])
-            self.env['logic.student.result'].search([('exam_id','=',record.id)]).unlink()
-            for student in students:
-                student_result = self.env['logic.student.result'].create({
-                    'student_id': student.id,
-                    'marks':0,
-                    'exam_id': record.id,
-                    'present': True,
-                })
-            record.student_results = self.env['logic.student.result'].search([('exam_id','=',record.id)])
-            record.students_added = True
+        students = self.env['logic.students'].search([
+                ('class_id', '=', self.classroom.id)])
+        self.env['logic.student.result'].search([('exam_id','=',self.id)]).unlink()
+        for student in students:
+            student_result = self.env['logic.student.result'].create({
+                'student_id': student.id,
+                'marks':0,
+                'exam_id': self.id,
+                'present': True,
+            })
+        self.student_results = self.env['logic.student.result'].search([('exam_id','=',self.id)])
+        self.students_added = True
     def reset_student_results(self):
-        for record in self:
-            self.env['logic.student.result'].search([('exam_id','=',record.id)]).unlink()
-            record.students_added = False
+        # for record in self:
+        self.env['logic.student.result'].search([('exam_id','=',self.id)]).unlink()
+        self.students_added = False
     @api.depends('present_students')
     def _compute_bokeh_chart(self):
         for record in self:

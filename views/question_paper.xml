@@ -28,6 +28,10 @@
         <field name="type">form</field>
         <field name="arch" type="xml">
             <form string="Exam Question">
+                <header>
+                    <button string="Create duplicates" name="make_copy" type="object" class="oe_highlight"/>
+
+                </header>
                 <sheet>
                     <group>
                         <group>
@@ -69,6 +73,8 @@
             <form string="Exam Paper">
                 <header>
                     <button string="Download Question Paper" name="download_paper_docx" type="object" class="oe_highlight"/>
+                    <button string="Download Answer Key" name="download_answer_key_docx" type="object" class="oe_highlight"/>
+                    
                 </header>
                 <sheet>
                     <group>
@@ -79,6 +85,7 @@
                         <page string="Questions">
                             <field name="questions">
                                 <tree>
+                                    <field name="sequence" widget="handle"/>
                                     <field name="name"/>
                                 </tree>
                             </field>

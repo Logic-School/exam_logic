@@ -24,11 +24,11 @@
                         <t t-foreach="o.questions" t-as="question">
                             <!-- <p><span t-field="question.name"/></p> -->
                             <div class="row" style="page-break-inside:avoid;">
-                                <span t-field="question.question"/><br/>
-                                <span t-if="question.question_type=='mcq'">A) <span t-field="question.option_a"/></span><br/>
-                                <span t-if="question.question_type=='mcq'">B) <span t-field="question.option_b"/></span><br/>
-                                <span t-if="question.question_type=='mcq'">C) <span t-field="question.option_c"/></span><br/>
-                                <span t-if="question.question_type=='mcq'">D) <span t-field="question.option_d"/></span><br/>
+                                <span t-field="question.question"/>
+                                <span t-if="question.question_type=='mcq'">A) <span t-field="question.option_a"/><br/></span>
+                                <span t-if="question.question_type=='mcq'">B) <span t-field="question.option_b"/><br/></span>
+                                <span t-if="question.question_type=='mcq'">C) <span t-field="question.option_c"/><br/></span>
+                                <span t-if="question.question_type=='mcq'">D) <span t-field="question.option_d"/><br/></span>
                             </div>
                         </t>
                     </div>

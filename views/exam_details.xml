@@ -9,6 +9,7 @@
     </record>
     <menuitem name="Exams" id="menu_exams"
               action="details_exam_view_action"
+              web_icon="exam_logic/static/description/icon.png"
               sequence="6"/>
     <menuitem name="Exams" id="menu_exam_details"
               action="details_exam_view_action"
@@ -59,8 +60,8 @@
                             <field name="exam_type"/>
                             <field name="quart_percent" attrs="{'invisible': [('exam_type','!=','quarterly')]}"/>
                             <field name="topic" attrs="{'invisible': [('exam_type','!=','topic')]}"/>
-                            <field name="classroom"/>
                             <field name="batch"/>
+                            <field name="classroom"/>
                             <field name="faculty" options="{'no_create': True, 'no_create_edit':True}"/>
 
                         </group>
