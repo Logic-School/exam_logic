@@ -8,7 +8,8 @@
     <menuitem name="Questions" id="menu_exam_question"
               action="details_exam_questions_action"
               parent="menu_exams"
-              sequence="10"/>
+              sequence="10"
+              groups="exam_logic.group_exam_admin"/>
 
     <record id="exam_question_tree_view" model="ir.ui.view">
         <field name="name">exam.question.tree.view</field>
@@ -29,7 +30,7 @@
         <field name="arch" type="xml">
             <form string="Exam Question">
                 <header>
-                    <button string="Create duplicates" name="make_copy" type="object" class="oe_highlight"/>
+                    <!-- <button string="Create duplicates" name="make_copy" type="object" class="oe_highlight"/> -->
 
                 </header>
                 <sheet>
@@ -62,7 +63,8 @@
     <menuitem name="Papers" id="menu_exam_paper"
               action="details_exam_papers_action"
               parent="menu_exams"
-              sequence="15"/>
+              sequence="15"
+              groups="exam_logic.group_exam_admin"/>
     
     
     <record id="exam_paper_form_view" model="ir.ui.view">

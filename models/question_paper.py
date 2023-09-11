@@ -55,6 +55,7 @@ class ExamPaper(models.Model):
         divs = length//3
         if rem==1:
             col1_lim = divs+1
+            col2_lim = col1_lim + divs
         elif rem==2:
             col1_lim = divs+1
             col2_lim = col1_lim + divs + 1

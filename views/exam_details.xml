@@ -10,11 +10,13 @@
     <menuitem name="Exams" id="menu_exams"
               action="details_exam_view_action"
               web_icon="exam_logic/static/description/icon.png"
-              sequence="6"/>
+              sequence="6"
+              groups="exam_logic.group_exam_admin,exam_logic.group_exam_coordinator,exam_logic.group_exam_academic_head"/>
     <menuitem name="Exams" id="menu_exam_details"
               action="details_exam_view_action"
               parent="menu_exams"
-              sequence="1"/>
+              sequence="1"
+              groups="exam_logic.group_exam_admin,exam_logic.group_exam_coordinator,exam_logic.group_exam_academic_head"/>
 
     <!-- chatgpt  -->
     <!-- <record id="action_exam_result_m2m_wizard" model="ir.actions.act_window">
@@ -49,7 +51,7 @@
             <form string="Exam">
                 <header>
                     <button name="create_student_results" string="Add Students" help="Click here to add students of the selected batch" type="object" class="oe_highlight" attrs="{'invisible': [('students_added','=',True)]}"/>
-                    <button name="reset_student_results" string="Reset Students" help="Clear all the result records of students appeared in this exam" type="object" class="oe_highlight" attrs="{'invisible': [('students_added','=',False)]}"/>
+                    <button name="reset_student_results" string="Reset Students" confirm="This will remove all the result records of the current exam" help="Clear all the result records of students appeared in this exam" type="object" class="oe_highlight" attrs="{'invisible': [('students_added','=',False)]}"/>
                 </header> 
                 <sheet>
                     <group>
@@ -66,7 +68,7 @@
 
                         </group>
                         <group>
-                            <field name="create_uid" string="Coordinator"/>
+                            <field name="coordinator" string="Coordinator"/>
                             <field name="total_marks"/>
                             <field name="pass_mark"/>
                             <field name="average_marks"/>

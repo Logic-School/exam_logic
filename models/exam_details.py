@@ -12,14 +12,16 @@ class ExamDetails(models.Model):
     quart_percent = fields.Selection([('25','25%'), ('50', '50%'), ('75', '75%'), ('100', '100%')], string='Quarterly Percent')
     batch = fields.Many2one('logic.base.batch',string="Batch")
     classroom = fields.Many2one('logic.base.class',string="Class",domain="[('batch_id','=',batch)]")
-    # coordinator = fields.Many2one('res.users',string="Coordinator",)
+    def get_coordinator_domain(self):
+        return [('id', 'in', self.env.ref('exam_logic.group_exam_coordinator').users.ids)]
+    coordinator = fields.Many2one('res.users',default=lambda self: self.env.user.id, domain=get_coordinator_domain)
     pass_percentage = fields.Float(string="Pass Percentage", compute="_compute_pass_fail_percentage",default=0)
     fail_percentage = fields.Float(string="Fail Percentage", compute="_compute_pass_fail_percentage",default=0)
     faculty = fields.Many2one('res.users',string="Faculty", domain=[('faculty_check','=',True)])
     class_teacher = fields.Many2one('hr.employee',string="Class Teacher")
     student_results = fields.Many2many('logic.student.result', string='Students',store=True)
     pass_mark = fields.Integer(string="Pass Mark")
-    total_marks = fields.Integer(string="Total Marks")
+    total_marks = fields.Integer(string="Total Marks", default=100)
     present_students = fields.Integer(string="Attended Students",compute="_compute_total_attendance")        
     average_marks = fields.Float(string="Average Marks", compute="_compute_average_marks")
     bokeh_chart = fields.Text(string="Result Chart",compute = "_compute_bokeh_chart")
@@ -28,8 +30,12 @@ class ExamDetails(models.Model):
     def create_student_results(self):
         # for record in self:
             # if not record.student_results:
+        if not self.classroom:
+            raise UserError("You have to assign a class before adding students!")
         students = self.env['logic.students'].search([
-                ('class_id', '=', self.classroom.id)])
+                ('allocated_class_id', '=', self.classroom.id)])
+        if not students:
+            raise UserError("Selected class does not have any students allocated!")
         self.env['logic.student.result'].search([('exam_id','=',self.id)]).unlink()
         for student in students:
             student_result = self.env['logic.student.result'].create({

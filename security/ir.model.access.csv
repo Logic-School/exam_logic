@@ -1,7 +1,12 @@
 id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
 
-access_exam,access_details,model_exam_details,base.group_user,1,1,1,1
-access_result,access_details,model_logic_student_result,base.group_user,1,1,1,1
+access_exam_admin,access_exam_admin,model_exam_details,exam_logic.group_exam_admin,1,1,1,1
+access_exam_coordinator,access_exam_coordinator,model_exam_details,exam_logic.group_exam_coordinator,1,1,1,0
+access_exam_academic_head,access_exam_academic_head,model_exam_details,exam_logic.group_exam_academic_head,1,1,1,0
 
-access_exam_question,access_exam_question,model_exam_question,base.group_user,1,1,1,1
-access_exam_question_paper,access_exam_question_paper,model_exam_paper,base.group_user,1,1,1,1
+access_exam_result_admin,access_exam_result_admin,model_logic_student_result,exam_logic.group_exam_admin,1,1,1,1
+access_exam_result_coordinator,access_exam_result_coordinator,model_logic_student_result,exam_logic.group_exam_coordinator,1,1,1,1
+access_exam_result_academic_head,access_exam_result_academic_head,model_logic_student_result,exam_logic.group_exam_academic_head,1,1,1,1
+
+access_exam_question_admin,access_exam_question_admin,model_exam_question,exam_logic.group_exam_admin,1,1,1,1
+access_exam_paper_admin,access_exam_paper_admin,model_exam_paper,exam_logic.group_exam_admin,1,1,1,1

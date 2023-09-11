@@ -14,7 +14,8 @@
     <menuitem name="Results" id="menu_exam_results"
               action="details_exam_result_view_action"
               parent="menu_exams"
-              sequence="1"/>
+              sequence="1"
+              groups="exam_logic.group_exam_admin,exam_logic.group_exam_coordinator,exam_logic.group_exam_academic_head"/>
 
     <!-- Tree view -->
     <record id="student_result_tree_view" model="ir.ui.view">
