@@ -7,7 +7,7 @@ class ExamDetails(models.Model):
     _name = 'exam.details'
     name = fields.Char(string="Exam Name", store=True)
     date = fields.Date(string="Exam Date")
-    exam_type = fields.Selection([('quarterly', 'Quarterly Exam'), ('topic', 'Topic wise Exam')],string='Exam Type')
+    exam_type = fields.Selection([('quarterly', 'Quarterly Exam'), ('topic', 'Topic wise Exam'),('half_model','Half Model'),('model_exam','Model Exam')],string='Exam Type')
     topic = fields.Char(string="Topic")
     quart_percent = fields.Selection([('25','25%'), ('50', '50%'), ('75', '75%'), ('100', '100%')], string='Quarterly Percent')
     batch = fields.Many2one('logic.base.batch',string="Batch")
@@ -17,7 +17,7 @@ class ExamDetails(models.Model):
     coordinator = fields.Many2one('res.users',default=lambda self: self.env.user.id, domain=get_coordinator_domain)
     pass_percentage = fields.Float(string="Pass Percentage", compute="_compute_pass_fail_percentage",default=0)
     fail_percentage = fields.Float(string="Fail Percentage", compute="_compute_pass_fail_percentage",default=0)
-    faculty = fields.Many2one('res.users',string="Faculty", domain=[('faculty_check','=',True)])
+    faculty = fields.Many2many('res.users',string="Faculty", domain=[('faculty_check','=',True)])
     class_teacher = fields.Many2one('hr.employee',string="Class Teacher")
     student_results = fields.Many2many('logic.student.result', string='Students',store=True)
     pass_mark = fields.Integer(string="Pass Mark")
