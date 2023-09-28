@@ -19,7 +19,7 @@ class ExamDetails(models.Model):
     fail_percentage = fields.Float(string="Fail Percentage", compute="_compute_pass_fail_percentage",default=0)
     faculty = fields.Many2many('res.users',string="Faculty", domain=[('faculty_check','=',True)])
     class_teacher = fields.Many2one('hr.employee',string="Class Teacher")
-    student_results = fields.Many2many('logic.student.result', string='Students',store=True)
+    student_results = fields.One2many('logic.student.result','exam_id', string='Students',store=True)
     pass_mark = fields.Integer(string="Pass Mark")
     total_marks = fields.Integer(string="Total Marks", default=100)
     present_students = fields.Integer(string="Attended Students",compute="_compute_total_attendance")        
@@ -44,11 +44,13 @@ class ExamDetails(models.Model):
                 'exam_id': self.id,
                 'present': True,
             })
-        self.student_results = self.env['logic.student.result'].search([('exam_id','=',self.id)])
+        # self.student_results = self.env['logic.student.result'].search([('exam_id','=',self.id)])
         self.students_added = True
     def reset_student_results(self):
         # for record in self:
-        self.env['logic.student.result'].search([('exam_id','=',self.id)]).unlink()
+        # self.env['logic.student.result'].search([('exam_id','=',self.id)]).unlink()
+        for result in self.student_results:
+            result.unlink()
         self.students_added = False
     @api.depends('present_students')
     def _compute_bokeh_chart(self):

@@ -7,7 +7,7 @@
         <field name="context">{'search_default_exam_id': 1}</field>
         <!-- <field name="context">{'default_exam_id': active_id}</field>
         <field name="domain">[('exam_id', '=', active_id)]</field> -->
-        <field name="view_mode">tree,form</field>
+        <field name="view_mode">tree</field>
     </record>
     <!-- menu items for exam details -->
 

@@ -80,7 +80,7 @@
                             <notebook>
                                 <page string="Students">
                                         <field name="student_results" context = "{'parent_id': active_id, 'parent_model': 'exam.details'}" domain="[('exam_id', '=', active_id)]" >
-                                            <tree editable="bottom" create="0"> 
+                                            <tree editable="bottom" create="0" delete="0"> 
                                                 <field name = "student_id"/>
                                                 <field name = "marks"/>
                                                 <field name = "present"/>
