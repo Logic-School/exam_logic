@@ -32,8 +32,11 @@ class ExamDetails(models.Model):
             # if not record.student_results:
         if not self.classroom:
             raise UserError("You have to assign a class before adding students!")
+        class_allocated_stud_ids = []
+        for stud_line in self.classroom.line_base_ids:
+            class_allocated_stud_ids.append(stud_line.student_id.id)
         students = self.env['logic.students'].search([
-                ('class_id', '=', self.classroom.id)])
+                ('id', 'in', class_allocated_stud_ids)])
         if not students:
             raise UserError("Selected class does not have any students allocated!")
         self.env['logic.student.result'].search([('exam_id','=',self.id)]).unlink()
