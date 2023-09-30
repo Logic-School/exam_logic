@@ -5,12 +5,12 @@ from . import pie_chart
 
 class ExamDetails(models.Model):
     _name = 'exam.details'
-    name = fields.Char(string="Exam Name", store=True)
-    date = fields.Date(string="Exam Date")
-    exam_type = fields.Selection([('quarterly', 'Quarterly Exam'), ('topic', 'Topic wise Exam'),('half_model','Half Model'),('model_exam','Model Exam')],string='Exam Type')
+    name = fields.Char(string="Exam Name", store=True,required=True)
+    date = fields.Date(string="Exam Date",required=True)
+    exam_type = fields.Selection([('quarterly', 'Quarterly Exam'), ('topic', 'Topic wise Exam'),('half_model','Half Model'),('model_exam','Model Exam')],string='Exam Type',required=True)
     topic = fields.Char(string="Topic")
     quart_percent = fields.Selection([('25','25%'), ('50', '50%'), ('75', '75%'), ('100', '100%')], string='Quarterly Percent')
-    batch = fields.Many2one('logic.base.batch',string="Batch")
+    batch = fields.Many2one('logic.base.batch',string="Batch",required=True)
     classroom = fields.Many2one('logic.base.class',string="Class",domain="[('batch_id','=',batch)]")
     def get_coordinator_domain(self):
         return [('id', 'in', self.env.ref('exam_logic.group_exam_coordinator').users.ids)]
