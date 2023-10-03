@@ -6,6 +6,7 @@ from odoo.exceptions import UserError
 
 class ExamQuestion(models.Model):
     _name="exam.question"
+    _order="sequence"
     name = fields.Char(string="Name")
     index = fields.Integer()
     question = fields.Html(string="Question")

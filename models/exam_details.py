@@ -34,7 +34,7 @@ class ExamDetails(models.Model):
             raise UserError("You have to assign a class before adding students!")
         class_allocated_stud_ids = []
         for stud_line in self.classroom.line_base_ids:
-            class_allocated_stud_ids.append(stud_line.student_id.id)
+            class_allocated_stud_ids.append(stud_line.student_id.id) 
         students = self.env['logic.students'].search([
                 ('id', 'in', class_allocated_stud_ids)])
         if not students:

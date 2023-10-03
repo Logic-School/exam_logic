@@ -44,5 +44,49 @@
             <field name="perm_create" eval="True"/>
             <field name="perm_unlink" eval="True"/>
         </record>
+
+        <!-- <record id="exam_question_academic_head_access" model="ir.rule">
+            <field name="name">Exam Question Academic Head Access</field>
+            <field name="model_id" ref="model_exam_question"/>
+            <field name="domain_force">['|',('create_uid.id', '=', user.id),('create_uid.employee_id.id', 'in', user.employee_id.child_ids.ids)]</field>
+            <field name="groups" eval="[(4, ref('exam_logic.group_exam_academic_head'))]"/>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_write" eval="True"/>
+            <field name="perm_create" eval="True"/>
+            <field name="perm_unlink" eval="True"/>
+        </record> -->
+
+        <record id="exam_paper_academic_head_access" model="ir.rule">
+            <field name="name">Exam Paper Academic Head Access</field>
+            <field name="model_id" ref="model_exam_paper"/>
+            <field name="domain_force">['|',('create_uid.id', '=', user.id),('create_uid.employee_id.id', 'in', user.employee_id.child_ids.ids)]</field>
+            <field name="groups" eval="[(4, ref('exam_logic.group_exam_academic_head'))]"/>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_write" eval="True"/>
+            <field name="perm_create" eval="True"/>
+            <field name="perm_unlink" eval="True"/>
+        </record>
+
+        <!-- <record id="exam_question_coordinator_access" model="ir.rule">
+            <field name="name">Exam Question Coordinator Access</field>
+            <field name="model_id" ref="model_exam_question"/>
+            <field name="domain_force">[('create_uid.id', '=', user.id)]</field>
+            <field name="groups" eval="[(4, ref('exam_logic.group_exam_coordinator'))]"/>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_write" eval="True"/>
+            <field name="perm_create" eval="True"/>
+            <field name="perm_unlink" eval="True"/>
+        </record> -->
+
+        <record id="exam_paper_coordinator_access" model="ir.rule">
+            <field name="name">Exam Paper Coordinator Access</field>
+            <field name="model_id" ref="model_exam_paper"/>
+            <field name="domain_force">[('create_uid.id', '=', user.id)]</field>
+            <field name="groups" eval="[(4, ref('exam_logic.group_exam_coordinator'))]"/>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_write" eval="True"/>
+            <field name="perm_create" eval="True"/>
+            <field name="perm_unlink" eval="True"/>
+        </record>
     </data>
 </odoo>

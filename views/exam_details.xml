@@ -37,6 +37,8 @@
             <tree>
                 <field name="name"/>
                 <field name="date"/>
+                <field name="classroom"/>
+                <field name="faculty"/>
                 <field name="exam_type"/>
             </tree>
 
@@ -106,7 +108,11 @@
         <field name="arch" type="xml">
             <search>
                 <group expand="0" string="Group By">
+                    <filter string="Exam Type" name="exam_type" context="{'group_by': 'exam_type'}"/>
                     <filter string="Batch" name="batch" context="{'group_by': 'batch'}"/>
+                    <filter string="Class" name="class" context="{'group_by': 'classroom'}"/>
+
+
                 </group>
             </search>
         </field>
