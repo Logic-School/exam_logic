@@ -38,7 +38,6 @@
                 <field name="name"/>
                 <field name="date"/>
                 <field name="classroom"/>
-                <field name="faculty"/>
                 <field name="exam_type"/>
             </tree>
 

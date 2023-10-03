@@ -81,6 +81,7 @@
                 <sheet>
                     <group>
                         <field name="name"/>
+                        <field name="course"/>
                         <!-- <field name="questions_html"/> -->
                     </group>
                     <notebook>

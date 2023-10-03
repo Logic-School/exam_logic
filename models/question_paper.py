@@ -37,6 +37,7 @@ class ExamQuestion(models.Model):
 class ExamPaper(models.Model):
     _name="exam.paper"
     name = fields.Char(string="Paper Name")
+    course = fields.Many2one('logic.base.courses',string="Course")
     questions = fields.Many2many('exam.question',string="Questions")
     questions_html = fields.Html()
     docx_qpaper = fields.Binary()
