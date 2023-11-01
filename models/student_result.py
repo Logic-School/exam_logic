@@ -17,6 +17,6 @@ class StudentExamResult(models.Model):
             return parent_obj.id
     
     exam_id = fields.Many2one("exam.details", ondelete='cascade',required=True, string="Exam",default=_get_default_exam_id)
-    total_marks = fields.Integer(string="Total Marks",related="exam_id.total_marks")
-    marks = fields.Integer(string="Scored Marks")
+    total_marks = fields.Float(string="Total Marks",related="exam_id.total_marks")
+    marks = fields.Float(string="Scored Marks")
     present = fields.Boolean(string="Attendance")
