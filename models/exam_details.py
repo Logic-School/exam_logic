@@ -14,7 +14,7 @@ class ExamDetails(models.Model):
     classroom = fields.Many2one('logic.base.class',string="Class",domain="[('batch_id','=',batch)]")
     def get_coordinator_domain(self):
         return [('id', 'in', self.env.ref('exam_logic.group_exam_coordinator').users.ids)]
-    coordinator = fields.Many2one('res.users',default=lambda self: self.env.user.id, domain=get_coordinator_domain)
+    coordinator = fields.Many2one('res.users',default=lambda self: self.env.user.id, domain=get_coordinator_domain, readonly=True)
     pass_percentage = fields.Float(string="Pass Percentage", compute="_compute_pass_fail_percentage",default=0)
     fail_percentage = fields.Float(string="Fail Percentage", compute="_compute_pass_fail_percentage",default=0)
     faculty = fields.Many2many('res.users',string="Faculty", domain=[('faculty_check','=',True)])
