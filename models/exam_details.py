@@ -5,6 +5,8 @@ from . import pie_chart
 
 class ExamDetails(models.Model):
     _name = 'exam.details'
+    _description="Exam"
+    _inherit = ['mail.thread', 'mail.activity.mixin']
     name = fields.Char(string="Exam Name", store=True,required=True)
     date = fields.Date(string="Exam Date",required=True)
     exam_type = fields.Selection([('quarterly', 'Quarterly Exam'), ('topic', 'Topic wise Exam'),('half_model','Half Model'),('model_exam','Model Exam')],string='Exam Type',required=True)
