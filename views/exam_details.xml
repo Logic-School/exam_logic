@@ -65,10 +65,11 @@
                             <field name="topic" attrs="{'invisible': [('exam_type','!=','topic')]}"/>
                             <field name="batch"/>
                             <field name="classroom"/>
+                            <field name="class_teacher"/>
                             <field name="faculty" widget="many2many_tags" options="{'no_create': True, 'no_create_edit':True}"/>
                         </group>
                         <group>
-                            <field name="coordinator" string="Coordinator"/>
+                            <field name="coordinator" string="Exam Coordinator"/>
                             <field name="total_marks"/>
                             <field name="pass_mark"/>
                             <field name="average_marks"/>
