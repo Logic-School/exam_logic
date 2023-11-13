@@ -20,7 +20,7 @@ class ExamDetails(models.Model):
     pass_percentage = fields.Float(string="Pass Percentage", compute="_compute_pass_fail_percentage",default=0)
     fail_percentage = fields.Float(string="Fail Percentage", compute="_compute_pass_fail_percentage",default=0)
     faculty = fields.Many2many('res.users',string="Faculty", domain=[('faculty_check','=',True)])
-    class_teacher = fields.Many2one('res.users',related="batch.academic_coordinator",string="Class Teacher")
+    class_teacher = fields.Many2one('res.users',related="batch.academic_coordinator",string="Class Teacher",store=True)
     student_results = fields.One2many('logic.student.result','exam_id', string='Students',store=True)
     pass_mark = fields.Float(string="Pass Mark")
     total_marks = fields.Float(string="Total Marks", default=100)
