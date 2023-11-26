@@ -38,7 +38,12 @@
                 <field name="name"/>
                 <field name="date"/>
                 <field name="classroom"/>
+                <field name="strength_present_count_display"/>
+                <field name="strength_absent_count_display"/>
+                <field name="pass_count"/>
+                <field name="fail_count"/>
                 <field name="exam_type"/>
+                <field name="branch_id"/>
             </tree>
 
         </field>
@@ -52,7 +57,9 @@
             <form string="Exam">
                 <header>
                     <button name="create_student_results" string="Add Students" help="Click here to add students of the selected batch" type="object" class="oe_highlight" attrs="{'invisible': [('students_added','=',True)]}"/>
-                    <button name="reset_student_results" string="Reset Students" confirm="This will remove all the result records of the current exam" help="Clear all the result records of students appeared in this exam" type="object" class="oe_highlight" attrs="{'invisible': [('students_added','=',False)]}"/>
+                    <button name="action_confirm" string="Submit" type="object" class="oe_highlight" attrs="{'invisible': ['|',('students_added','=',False),('state','!=','draft')]}"/>
+                    <button name="reset_student_results" string="Reset Students" confirm="This will remove all the result records of the current exam" help="Clear all the result records of students appeared in this exam" type="object" class="oe_highlight" attrs="{'invisible': ['|',('students_added','=',False),('state','=','submit')]}"/>
+                    <field name="state" widget="statusbar" statusbar_visible="draft,submit"/>
                 </header> 
                 <sheet>
                     <group>
@@ -63,8 +70,8 @@
                             <field name="exam_type"/>
                             <field name="quart_percent" attrs="{'invisible': [('exam_type','!=','quarterly')]}"/>
                             <field name="topic" attrs="{'invisible': [('exam_type','!=','topic')]}"/>
-                            <field name="batch" context="{'custom_name_display':True}"/>
-                            <field name="classroom"/>
+                            <field name="batch" context="{'custom_name_display':True}" options="{'no_create': True, 'no_create_edit':True}"/>
+                            <field name="classroom" options="{'no_create': True, 'no_create_edit':True}"/>
                             <field name="class_teacher"/>
                             <field name="faculty" widget="many2many_tags" options="{'no_create': True, 'no_create_edit':True}"/>
                         </group>
@@ -73,9 +80,13 @@
                             <field name="total_marks"/>
                             <field name="pass_mark"/>
                             <field name="average_marks"/>
-                            <field name="present_students"/>
-                            <field name='pass_percentage' invisible="0"/>
-                            <field name='fail_percentage' invisible="0"/>
+                            <!-- <field name="present_students"/> -->
+                            <field name="strength_present_count_display"/>
+                            <field name="strength_absent_count_display"/>
+                            <field name="pass_count"/>
+                            <field name="fail_count"/>
+                            <field name='pass_percentage' invisible="1"/>
+                            <field name='fail_percentage' invisible="1"/>
                             <!-- <field name='_percentage'/> -->
                         </group>
                         <group>

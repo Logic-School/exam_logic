@@ -28,7 +28,15 @@ class ExamDetails(models.Model):
     average_marks = fields.Float(string="Average Marks", compute="_compute_average_marks")
     bokeh_chart = fields.Text(string="Result Chart",compute = "_compute_bokeh_chart")
     students_added = fields.Boolean(string="Students Added", default=False, help="To identify if students result records are added to the form")
-    
+    batch_strength = fields.Integer(string="Batch Strength",compute="_compute_batch_strength")
+    absent_students = fields.Integer(string="Not Attended",compute="_compute_absent_students")
+    strength_present_count_display = fields.Char(string="Attended Students",compute="_compute_strength_present_count_display")
+    strength_absent_count_display = fields.Char(string="Not Attended",compute="_compute_strength_absent_count_display")
+    state = fields.Selection(selection=[('draft','Draft'), ('submit','Submitted')], string="Status", default="draft")
+
+    pass_count = fields.Integer(string="Passed Students", compute="_compute_pass_fail_count")
+    fail_count = fields.Integer(string="Failed Students", compute="_compute_pass_fail_count")
+    branch_id = fields.Many2one('logic.base.branches',related="batch.branch_id", string="Branch", store=True)
     def create_student_results(self):
         # for record in self:
             # if not record.student_results:
@@ -83,6 +91,20 @@ class ExamDetails(models.Model):
                 record.pass_percentage=0
                 record.fail_percentage=0
 
+    def _compute_pass_fail_count(self):
+        for record in self:
+            pass_count = 0
+            fail_count = 0
+            for result in record.student_results:
+                if result.present:
+                    if result.marks >= record.pass_mark:
+                        pass_count+=1
+                    else:
+                        fail_count+=1
+            record.pass_count = pass_count
+            record.fail_count = fail_count
+            
+            
     @api.depends('student_results')
     def _compute_total_attendance(self):
         for record in self:
@@ -92,6 +114,24 @@ class ExamDetails(models.Model):
                     total+=1
             record.present_students = total
 
+    def _compute_batch_strength(self):
+        for record in self:
+            if record.student_results:
+                record.batch_strength = len(record.student_results)
+            else:
+                record.batch_strength = 0
+    def _compute_absent_students(self):
+        for record in self:
+            record.absent_students = record.batch_strength - record.present_students 
+
+    def _compute_strength_present_count_display(self):
+        for record in self:
+            record.strength_present_count_display = str(record.present_students) + " / " + str(record.batch_strength)
+
+    def _compute_strength_absent_count_display(self):
+        for record in self:
+            record.strength_absent_count_display = str(record.absent_students) + " / " + str(record.batch_strength)
+    
     @api.depends('student_results')
     def _compute_average_marks(self):
         for record in self:
@@ -102,6 +142,9 @@ class ExamDetails(models.Model):
                 record.average_marks = total/record.present_students
             else:
                 record.average_marks=0
+
+    def action_confirm(self):
+        self.state = 'submit'
             
     # @api.depends('date', 'exam_type', 'batch')
     # def _compute_name(self):    

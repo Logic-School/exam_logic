@@ -12,6 +12,8 @@
         'views/exam_result.xml',
         'views/question_paper.xml',
         'report/question_paper_report.xml',
+        'report/exam_details_report.xml',
+
     ],
     'demo': [],
     'summary': "Logic Exams",
