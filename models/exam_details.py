@@ -37,6 +37,7 @@ class ExamDetails(models.Model):
             class_allocated_stud_ids.append(stud_line.student_id.id) 
         students = self.env['logic.students'].search([
                 ('id', 'in', class_allocated_stud_ids)])
+        print(class_allocated_stud_ids,'studs')
         if not students:
             raise UserError("Selected class does not have any students allocated!")
         self.env['logic.student.result'].search([('exam_id','=',self.id)]).unlink()
