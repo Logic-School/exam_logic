@@ -110,6 +110,7 @@ class ExamDetails(models.Model):
 
     @api.depends('student_results')
     def _compute_average_marks(self):
+        print('hi')
         for record in self:
             total = 0
             for result in record.student_results:
