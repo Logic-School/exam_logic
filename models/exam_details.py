@@ -7,7 +7,7 @@ import requests
 
 class ExamDetails(models.Model):
     _name = 'exam.details'
-    name = fields.Char(string="Exam Name", store=True, required=True)
+    name = fields.Char(string="Subject Name", store=True, required=True)
     date = fields.Date(string="Exam Date", required=True)
     exam_type = fields.Selection(
         [('quarterly', 'Quarterly Exam'), ('topic', 'Topic wise Exam'), ('half_model', 'Half Model'),
@@ -164,7 +164,7 @@ class ExamDetails(models.Model):
             student_name = ' '.join(emp_name)
             results = ' '.join(result)
             if i.student_id.parent_whatsapp:
-                message_approved = "Dear Parent, This is to inform you that" + str(i.student_id.name) + ' ' + "marks of " + ' ' + str(i.marks) + ' ' + "exam conducted on" + ' ' + str(self.date) + ' ' + " is " + str(i.marks) + ' ' + " Pass mark :" + ' ' + str(
+                message_approved = "Dear Parent, This is to inform you that" + " " + str(i.student_id.name) + ' ' + "marks of " + ' ' + str(i.name) + ' ' + "exam conducted on" + ' ' + str(self.date) + ' ' + " is " + str(i.marks) + ' ' + " Pass mark :" + ' ' + str(
                     self.pass_mark) + ' ' + ". Result :" + results + ' ' + ". Regards, LOGIC."
 
                 number = ' '.join(emp_phone)
