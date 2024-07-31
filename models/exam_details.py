@@ -148,13 +148,21 @@ class ExamDetails(models.Model):
             emp_phone = []
             mark = i.marks
             result = []
-            date = []
+            date = [[[[]]]]
+            student = self.env['logic.students'].sudo().search([('id', '=', i.student_id.id)])
+            print(student, 'student')
 
             if i.student_id:
+
                 emp_phone.clear()
                 emp_name.clear()
                 emp_name.append(i.student_id.name)
-                emp_phone.append(i.student_id.parent_whatsapp)
+                if student.parent_whatsapp:
+                    emp_phone.append(student.parent_whatsapp)
+                elif student.father_number:
+                    emp_phone.append(student.father_number)
+                else:
+                    emp_phone.append('')
                 result.clear()
                 if i.marks >= self.pass_mark:
                     result.append('Passed')
@@ -163,13 +171,16 @@ class ExamDetails(models.Model):
 
             student_name = ' '.join(emp_name)
             results = ' '.join(result)
-            if i.student_id.parent_whatsapp:
-                message_approved = "Dear Parent, This is to inform you that" + " " + str(i.student_id.name) + ' ' + "marks of " + ' ' + str(i.name) + ' ' + "exam conducted on" + ' ' + str(self.date) + ' ' + " is " + str(i.marks) + ' ' + " Pass mark :" + ' ' + str(
-                    self.pass_mark) + ' ' + ". Result :" + results + ' ' + ". Regards, LOGIC."
 
-                number = ' '.join(emp_phone)
+            message_approved = "Dear Parent, This is to inform you that" + " " + str(
+                i.student_id.name) + ' ' + "marks of " + ' ' + str(i.name) + ' ' + "exam conducted on" + ' ' + str(
+                self.date) + ' ' + " is " + str(i.marks) + ' ' + " Pass mark :" + ' ' + str(
+                self.pass_mark) + ' ' + ". Result :" + results + ' ' + ". Regards, LOGIC."
 
-                url = "http://sms.mithraitsolutions.com/httpapi/httpapi?token=adf60dcda3a04ec6d13f827b38349609&sender=LSMKCH&number=" + str(
-                    number) + "&route=2&type=Text&sms=" + message_approved + "&templateid=" + temp_id  # A GET request to the API
-                response = requests.get(url)
+            number = ' '.join(emp_phone)
+            print(number, 'number')
+
+            url = "http://sms.mithraitsolutions.com/httpapi/httpapi?token=adf60dcda3a04ec6d13f827b38349609&sender=LSMKCH&number=" + str(
+                number) + "&route=2&type=Text&sms=" + message_approved + "&templateid=" + temp_id  # A GET request to the API
+            response = requests.get(url)
         self.state = 'sms_sent'
