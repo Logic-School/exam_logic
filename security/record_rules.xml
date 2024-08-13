@@ -26,7 +26,7 @@
         <record id="exam_result_coordinator_access" model="ir.rule">
             <field name="name">Exam Result Coordinator Access</field>
             <field name="model_id" ref="model_logic_student_result"/>
-            <field name="domain_force">[('exam_id.coordinator.id', '=', user.id)]</field>
+            <field name="domain_force">['|',('exam_id.coordinator.id', '=', user.id), ('exam_id.class_teacher.id', '=', user.employee_id.id)]</field>
             <field name="groups" eval="[(4, ref('exam_logic.group_exam_coordinator'))]"/>
             <field name="perm_read" eval="True"/>
             <field name="perm_write" eval="True"/>
