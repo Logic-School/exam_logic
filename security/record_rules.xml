@@ -4,7 +4,7 @@
         <record id="exam_coordinator_access" model="ir.rule">
             <field name="name">Exam Coordinator Access</field>
             <field name="model_id" ref="model_exam_details"/>
-            <field name="domain_force">[('coordinator.id', '=', user.id)]</field>
+            <field name="domain_force">['|',('coordinator.id', '=', user.id), ('class_teacher.id', '=', user.employee_id.id)]</field>
             <field name="groups" eval="[(4, ref('exam_logic.group_exam_coordinator'))]"/>
             <field name="perm_read" eval="True"/>
             <field name="perm_write" eval="True"/>
@@ -81,7 +81,7 @@
         <record id="exam_paper_coordinator_access" model="ir.rule">
             <field name="name">Exam Paper Coordinator Access</field>
             <field name="model_id" ref="model_exam_paper"/>
-            <field name="domain_force">[('create_uid.id', '=', user.id)]</field>
+            <field name="domain_force">['|',('create_uid.id', '=', user.id), ('class_teacher.id', '=', user.employee_id.id)]</field>
             <field name="groups" eval="[(4, ref('exam_logic.group_exam_coordinator'))]"/>
             <field name="perm_read" eval="True"/>
             <field name="perm_write" eval="True"/>
